@@ -1,10 +1,10 @@
-IPAddress myIp(10, 16, 3, 12); //modificar ip (último número)
+IPAddress myIp(10, 16, 3, 21);
 //destination IP
 IPAddress outIp(10, 16, 3, 2);
 EthernetUDP Udp;
 
- byte mac[] = {  //modificar
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x02 }; // you can find this written on the board of some Arduino Ethernets or shields
+ byte mac[] = { 
+  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x11 }; // you can find this written on the board of some Arduino Ethernets or shields
 
 //port numbers
 const unsigned int outPort = 6006;

@@ -10,7 +10,7 @@
 #define OFF LOW
 
 
-const unsigned int GameNumber = 0; //Cambiarlo
+const unsigned int GameNumber = 11;
 bool gameRunning = false;
 
 const unsigned int reles[2] = {2,3};
