@@ -1,0 +1,191 @@
+#include <Ethernet.h>
+#include <EthernetUdp.h>
+#include <SPI.h>    
+#include <OSCMessage.h>
+#include <OSCBundle.h>
+
+#include "setup_ethernet.h"
+
+#define ON HIGH
+#define OFF LOW
+
+
+const unsigned int GameNumber = 0; //Cambiarlo
+bool gameRunning = false;
+
+const unsigned int reles[2] = {2,3};
+
+String start_str;
+const char * start_routename;
+
+String end_str;
+const char * end_routename;
+String reset_str;
+const char * reset_routename;
+String rele_str;
+String door_str;
+const char * door_routename;
+
+String door_all_str;
+const char * door_all_routename;
+
+void setup() {
+  pinMode(reles[0], OUTPUT);
+  pinMode(reles[1], OUTPUT);
+
+  Serial.begin(9600);
+  while (!Serial) {
+  ;  // wait for serial port to connect. Needed for native USB port only
+  }
+
+  setup_ethernet();
+
+  start_str = "/game/" + String(GameNumber) + "/start";
+  start_routename = start_str.c_str();
+
+  end_str = "/game/" + String(GameNumber) + "/end";
+  end_routename = end_str.c_str();
+
+  reset_str = "/game/all/reset";
+  reset_routename = reset_str.c_str();
+
+  door_str = "/game/" + String(GameNumber) + "/door";
+  door_routename = door_str.c_str();
+
+  door_all_str = "/game/all/door";
+  door_all_routename = door_all_str.c_str();
+    
+}
+
+void loop() {
+
+
+  OSCMessage messageIN;
+  int size;
+  
+  if( (size = Udp.parsePacket())>0){
+    while(size--)
+      messageIN.fill(Udp.read());
+
+    if(messageIN.hasError()){
+      Serial.println("OSC message has error");
+    }
+      
+    messageIN.route(start_routename, routeStart);
+    messageIN.route(end_routename, routeEnd);
+    messageIN.route(reset_routename, routeReset);
+    messageIN.route(door_routename, route_door);
+    messageIN.route(door_all_routename, route_all_door);
+
+  }
+
+  if (gameRunning) {
+    //lógica juego
+    
+  }
+
+
+        
+}
+
+void routeStart(OSCMessage &msg, int addrOffset ){
+  Serial.println("Starting");
+  gameRunning = true;
+}
+
+void routeEnd(OSCMessage &msg, int addrOffset ){
+  Serial.println("Ending");
+  gameRunning = false;
+}
+void routeReset(OSCMessage &msg, int addrOffset ){
+  Serial.println("Reseting");
+  gameRunning = false;
+}
+
+void route_door(OSCMessage &msg, int addrOffset ){
+  if (msg.isInt(0)){
+    if (msg.getInt(0)== 0){
+      digitalWrite(reles[0], OFF);
+      sendoor(msg.getInt(0));
+      Serial.println("puerta off");
+    } else if (msg.getInt(0)== 1) {
+      digitalWrite(reles[0], ON);
+      sendoor(msg.getInt(0));
+      Serial.println("puerta on");
+    }
+  }
+
+}
+
+void route_all_door(OSCMessage &msg, int addrOffset ){
+  if (msg.isInt(0)){
+    if (msg.getInt(0)== 0){
+      digitalWrite(reles[0], OFF);
+      sendoor(msg.getInt(0));
+      Serial.println("puerta off");
+    } else if (msg.getInt(0)== 1) {
+      digitalWrite(reles[0], ON);
+      sendoor(msg.getInt(0));
+      Serial.println("puerta on");
+    }
+  }
+
+}
+
+void sendresult(int result) {
+  //the message wants an OSC address as first argument
+  String result_str;
+  result_str = "/game/" + String(GameNumber) + "/done";
+  const char * result_routename = result_str.c_str();
+  
+  OSCMessage msg(result_routename);
+  msg.add(result);
+  
+  Udp.beginPacket(outIp, outPort);
+  msg.send(Udp); // send the bytes to the SLIP stream
+  Udp.endPacket(); // mark the end of the OSC Packet
+  msg.empty(); // free space occupied by message
+}
+
+void sendreset(int result) {
+  //the message wants an OSC address as first argument
+  String result_str;
+  result_str = "/game/" + String(GameNumber) + "/reset";
+  const char * result_routename = result_str.c_str();
+  
+  OSCMessage msg(result_routename);
+  msg.add(result);
+  
+  Udp.beginPacket(outIp, outPort);
+  msg.send(Udp); // send the bytes to the SLIP stream
+  Udp.endPacket(); // mark the end of the OSC Packet
+  msg.empty(); // free space occupied by message
+}
+void sendoor(int result) {
+  //the message wants an OSC address as first argument
+  String result_str;
+  result_str = "/game/" + String(GameNumber) + "/door";
+  const char * result_routename = result_str.c_str();
+  
+  OSCMessage msg(result_routename);
+  msg.add(result);
+  
+  Udp.beginPacket(outIp, outPort);
+  msg.send(Udp); // send the bytes to the SLIP stream
+  Udp.endPacket(); // mark the end of the OSC Packet
+  msg.empty(); // free space occupied by message
+}
+void sendrele(int result) {
+  //the message wants an OSC address as first argument
+  String result_str;
+  result_str = "/game/" + String(GameNumber) + "/rele";
+  const char * result_routename = result_str.c_str();
+  
+  OSCMessage msg(result_routename);
+  msg.add(result);
+  
+  Udp.beginPacket(outIp, outPort);
+  msg.send(Udp); // send the bytes to the SLIP stream
+  Udp.endPacket(); // mark the end of the OSC Packet
+  msg.empty(); // free space occupied by message
+}
