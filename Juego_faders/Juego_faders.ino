@@ -99,7 +99,11 @@ void loop() {
 
   if (gameRunning) {
     //lógica juego
-    
+    if (check_card(0) && check_card(1) && check_card(2) && check_card(3) && check_card(4) && check_card(5)) { //comprobación similar (modificar)
+      Serial.print("game DONE!!!");
+      sendresult(1);
+      gameRunning = false;
+    }
   }
 
 
