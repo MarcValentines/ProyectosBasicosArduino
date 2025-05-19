@@ -14,8 +14,9 @@
 #define CANT_FADERS 6
 const int potPins[CANT_FADERS] = {A0, A1, A2, A3, A4, A5};
 //rangos
-const unsigned int rangoMin[CANT_FADERS] = {500, 200, 350, 100, 600, 400};
-const unsigned int rangoMax[CANT_FADERS] = {530, 230, 380, 130, 630, 430};
+const unsigned int rangoMin[CANT_FADERS] = {910, 90, 800, 100, 250, 450};
+const unsigned int rangoMax[CANT_FADERS] = {950, 130, 840, 130, 270, 480};
+unsigned int intentos = 0;
 
 //leds verificación FastLEd
 #define LED_PIN 6
