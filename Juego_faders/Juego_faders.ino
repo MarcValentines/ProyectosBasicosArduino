@@ -16,8 +16,12 @@ const int potPins[CANT_FADERS] = {A0, A1, A2, A3, A4, A5};
 const unsigned int rangoMin[CANT_FADERS] = {500, 200, 350, 100, 600, 400};
 const unsigned int rangoMax[CANT_FADERS] = {530, 230, 380, 130, 630, 430};
 
-//delay sin detener la placa
+//leds verificación
+const int leds[CANT_FADERS] = {1, 2, 3, 4, 5, 6}; //pines
 
+//delay sin detener la placa (para leds)
+unsigned int millisBase = 0;
+unsigned const long interval = 1000 //1 segundo
 
 const unsigned int GameNumber = 11;
 bool gameRunning = false;
@@ -44,11 +48,14 @@ void setup() {
   pinMode(reles[1], OUTPUT);
 
   //faders
-  pinMode(FADER_1, INPUT);
-  pinMode(FADER_2, INPUT);
-  pinMode(FADER_3, INPUT);
-  pinMode(FADER_4, INPUT);
-  pinMode(FADER_5, INPUT);
+  for(int i = 0, i < CANT_FADERS, i++){
+    pinMode(potPins[i], INPUT);
+  }
+
+  //leds
+  for(int i = 0, i < CANT_FADERS, i++){
+    pinMode(leds[i], OUTPUT);
+  }
 
   Serial.begin(9600);
   while (!Serial) {
