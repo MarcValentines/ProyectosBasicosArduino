@@ -3,6 +3,7 @@
 #include <SPI.h>    
 #include <OSCMessage.h>
 #include <OSCBundle.h>
+#include <FastLED.h>
 
 #include "setup_ethernet.h"
 
@@ -16,12 +17,18 @@ const int potPins[CANT_FADERS] = {A0, A1, A2, A3, A4, A5};
 const unsigned int rangoMin[CANT_FADERS] = {500, 200, 350, 100, 600, 400};
 const unsigned int rangoMax[CANT_FADERS] = {530, 230, 380, 130, 630, 430};
 
-//leds verificación
-const int leds[CANT_FADERS] = {1, 2, 3, 4, 5, 6}; //pines
+//leds verificación FastLEd
+#define LED_PIN 6
+#define NUM_LEDS 6
+#define LED_TYPE SK6812
+#define COLOR_ORDER GRB
+
+CRGB leds[NUM_LEDS];
+
 
 //delay sin detener la placa (para leds)
 unsigned int millisBase = 0;
-unsigned const long interval = 1000 //1 segundo
+unsigned const long interval = 1000; //1 segundo
 
 const unsigned int GameNumber = 11;
 bool gameRunning = false;
@@ -48,14 +55,15 @@ void setup() {
   pinMode(reles[1], OUTPUT);
 
   //faders
-  for(int i = 0, i < CANT_FADERS, i++){
+  for(int i = 0; i < 6; i++){
     pinMode(potPins[i], INPUT);
   }
 
   //leds
-  for(int i = 0, i < CANT_FADERS, i++){
-    pinMode(leds[i], OUTPUT);
-  }
+  FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+  FastLED.setBrightness(120);
+  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  FastLED.show();
 
   Serial.begin(9600);
   while (!Serial) {
@@ -115,7 +123,7 @@ void loop() {
 }
 //método para verificar si los potenciómetros se encuentran en su rango
 bool verificarFaders(){
-  for(int i = 0, i < CANT_FADERS, i++){
+  for(int i = 0; i < 6; i++){
     int valor = analogRead(potPins[i]);
     Serial.print("Fader: " + (i+1));
     Serial.print(": " + valor);
@@ -124,6 +132,8 @@ bool verificarFaders(){
       return false;
     }
   }
+  fill_solid(leds, NUM_LEDS, CRGB::Green);
+  FastLED.show();
   return true;
 }
 
