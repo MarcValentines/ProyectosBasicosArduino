@@ -9,6 +9,16 @@
 #define ON HIGH
 #define OFF LOW
 
+//definición de los pines de los faders
+#define FADER_1 A0
+#define FADER_2 A1
+#define FADER_3 A2
+#define FADER_4 A3
+#define FADER_5 A4
+#define FADER_6 A5
+
+//delay sin detener la placa
+
 
 const unsigned int GameNumber = 11;
 bool gameRunning = false;
@@ -30,8 +40,16 @@ String door_all_str;
 const char * door_all_routename;
 
 void setup() {
+  //reles
   pinMode(reles[0], OUTPUT);
   pinMode(reles[1], OUTPUT);
+
+  //faders
+  pinMode(FADER_1, INPUT);
+  pinMode(FADER_2, INPUT);
+  pinMode(FADER_3, INPUT);
+  pinMode(FADER_4, INPUT);
+  pinMode(FADER_5, INPUT);
 
   Serial.begin(9600);
   while (!Serial) {
