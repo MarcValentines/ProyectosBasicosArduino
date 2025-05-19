@@ -9,13 +9,17 @@
 #define ON HIGH
 #define OFF LOW
 
-//definición de los pines de los faders
+//definición de los pines de los faders´
+#define CANT_FADERS 6
 #define FADER_1 A0
 #define FADER_2 A1
 #define FADER_3 A2
 #define FADER_4 A3
 #define FADER_5 A4
 #define FADER_6 A5
+//rangos
+const unsigned int rangoMin[CANT_FADERS] = {500, 200, 350, 100, 600, 400};
+const unsigned int rangoMax[CANT_FADERS] = {530, 230, 380, 130, 630, 430};
 
 //delay sin detener la placa
 
