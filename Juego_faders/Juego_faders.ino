@@ -26,7 +26,6 @@ unsigned int intentos = 0;
 
 CRGB leds[NUM_LEDS];
 
-
 //delay sin detener la placa (para leds)
 unsigned int millisBase = 0;
 unsigned const long interval = 1000; //1 segundo
@@ -49,6 +48,9 @@ const char * door_routename;
 
 String door_all_str;
 const char * door_all_routename;
+
+String rele_str;
+const char * rele_routename;
 
 void setup() {
   //reles
@@ -87,6 +89,9 @@ void setup() {
 
   door_all_str = "/game/all/door";
   door_all_routename = door_all_str.c_str();
+
+  rele_str = "/game/" + String(GameNumber) + "/rele";
+  rele_routename = rele_str.c_str();
     
 }
 
@@ -109,7 +114,7 @@ void loop() {
     messageIN.route(reset_routename, routeReset);
     messageIN.route(door_routename, route_door);
     messageIN.route(door_all_routename, route_all_door);
-
+    messageIN.route(rele_routename, route_rele);
   }
 
   if (gameRunning) {
@@ -177,6 +182,21 @@ void route_all_door(OSCMessage &msg, int addrOffset ){
       digitalWrite(reles[0], ON);
       sendoor(msg.getInt(0));
       Serial.println("puerta on");
+    }
+  }
+
+}
+
+void route_rele(OSCMessage &msg, int addrOffset ){
+  if (msg.isInt(0)){
+    if (msg.getInt(0)== 0){
+      digitalWrite(reles[1], OFF);
+      sendrele(msg.getInt(0));
+      Serial.println("rele off");
+    } else if (msg.getInt(0)== 1) {
+      digitalWrite(reles[1], ON);
+      sendrele(msg.getInt(0));
+      Serial.println("rele on");
     }
   }
 
