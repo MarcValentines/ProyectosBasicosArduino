@@ -40,9 +40,10 @@ const char * start_routename;
 
 String end_str;
 const char * end_routename;
+
 String reset_str;
 const char * reset_routename;
-String rele_str;
+
 String door_str;
 const char * door_routename;
 
