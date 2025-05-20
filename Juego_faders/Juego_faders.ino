@@ -3,7 +3,7 @@
 #include <SPI.h>    
 #include <OSCMessage.h>
 #include <OSCBundle.h>
-#include <FastLED.h>
+//#include <FastLED.h>
 
 #include "setup_ethernet.h"
 
@@ -19,12 +19,12 @@ const unsigned int rangoMax[CANT_FADERS] = {950, 130, 840, 130, 270, 480};
 unsigned int intentos = 0;
 
 //leds verificación FastLEd
-#define LED_PIN 6
-#define NUM_LEDS 6
-#define LED_TYPE SK6812
-#define COLOR_ORDER GRB
+//#define LED_PIN 6
+//#define NUM_LEDS 6
+//#define LED_TYPE SK6812
+//#define COLOR_ORDER GRB
 
-CRGB leds[NUM_LEDS];
+//CRGB leds[NUM_LEDS];
 
 //delay sin detener la placa (para leds)
 unsigned int millisBase = 0;
@@ -63,10 +63,10 @@ void setup() {
   }
 
   //leds
-  FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);
-  FastLED.setBrightness(120);
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
-  FastLED.show();
+  //FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);
+  //FastLED.setBrightness(120);
+  //fill_solid(leds, NUM_LEDS, CRGB::Black);
+  //FastLED.show();
 
   Serial.begin(9600);
   while (!Serial) {
@@ -138,8 +138,8 @@ bool verificarFaders(){
       return false;
     }
   }
-  fill_solid(leds, NUM_LEDS, CRGB::Green);
-  FastLED.show();
+  //fill_solid(leds, NUM_LEDS, CRGB::Green);
+  //FastLED.show();
   return true;
 }
 
